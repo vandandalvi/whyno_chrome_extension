@@ -1,0 +1,983 @@
+/* Whyno Write on-page UI. Lives in a shadow root, so nothing here touches the page.
+   Look: the app's glass over the page, one solid accent, the system font. Tokens come from
+   styles/tokens.css, loaded into the same shadow root. */
+
+:host {
+  all: initial;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.wn-root {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+.wn-root *,
+.wn-root *::before,
+.wn-root *::after {
+  box-sizing: border-box;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+  color: inherit;
+  margin: 0;
+}
+
+.wn-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  display: block;
+}
+
+.wn-logo {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  display: block;
+}
+
+.wn-logo-lg {
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+}
+
+/* Glass: translucent, blurred, bright top edge, soft shadow. Thick enough to read over any page. */
+.wn-launcher,
+.wn-card {
+  position: fixed;
+  background: var(--glass-thick);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--edge-low);
+  box-shadow: 0 10px 30px var(--shadow), 0 1px 3px var(--shadow), inset 0 1px 0 var(--edge-high);
+  animation: wn-in 360ms cubic-bezier(0.34, 1.45, 0.64, 1);
+}
+
+/* A little spring: it rises, overshoots a hair, and settles. */
+@keyframes wn-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.9);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wn-launcher,
+  .wn-card {
+    animation: none;
+  }
+}
+
+/* ---------------------------------------------------------------- launcher */
+
+.wn-launcher {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 4px 4px 6px;
+  border-radius: var(--radius-pill);
+}
+
+.wn-launcher .wn-logo {
+  margin-right: 2px;
+}
+
+.wn-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 150ms ease, transform 120ms ease;
+}
+
+.wn-chip:hover {
+  background: var(--glass-recessed);
+}
+
+.wn-chip:active {
+  transform: scale(0.97);
+}
+
+.wn-chip .wn-icon {
+  color: var(--accent-ink);
+}
+
+.wn-chip:focus-visible,
+.wn-btn:focus-visible,
+.wn-icon-btn:focus-visible {
+  outline: 2px solid var(--accent-ink);
+  outline-offset: 2px;
+}
+
+/* ---------------------------------------------------------------- card */
+
+.wn-card {
+  width: min(420px, calc(100vw - 24px));
+  max-height: min(560px, calc(100vh - 24px));
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-card);
+  overflow: hidden;
+}
+
+.wn-card-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 10px 8px 16px;
+}
+
+.wn-title {
+  font-size: 15px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.wn-quota {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--ink-faint);
+  white-space: nowrap;
+}
+
+.wn-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 4px 16px 16px;
+  min-height: 0;
+}
+
+.wn-icon-btn {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: background-color 150ms ease;
+}
+
+.wn-icon-btn:hover {
+  background: var(--glass-recessed);
+  color: var(--ink);
+}
+
+.wn-icon-btn-solid,
+.wn-icon-btn-solid:hover {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.wn-icon-btn-solid:hover {
+  background: var(--accent-pressed);
+}
+
+/* The text Whyno proposes, in a recessed well so it reads as content, not chrome. */
+.wn-draft {
+  background: var(--glass-recessed);
+  border-radius: var(--radius-control);
+  padding: 12px 14px;
+  font-size: 14.5px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  overflow-y: auto;
+  max-height: 40vh;
+  min-height: 0;
+  outline: none;
+}
+
+.wn-quick {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.wn-quick::-webkit-scrollbar {
+  display: none;
+}
+
+.wn-quick .wn-chip {
+  background: var(--glass-recessed);
+  font-weight: 550;
+}
+
+.wn-quick .wn-chip:hover {
+  background: var(--glass-pressed);
+}
+
+.wn-ask {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.wn-ask-input,
+.wn-compose-input {
+  flex: 1;
+  width: 100%;
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  background: var(--glass-recessed);
+  padding: 0 14px;
+  height: 38px;
+  outline: none;
+  transition: border-color 150ms ease;
+}
+
+.wn-compose-input {
+  height: auto;
+  min-height: 96px;
+  border-radius: var(--radius-control);
+  padding: 12px 14px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.wn-ask-input::placeholder,
+.wn-compose-input::placeholder {
+  color: var(--ink-faint);
+}
+
+.wn-ask-input:focus,
+.wn-compose-input:focus {
+  border-color: var(--accent-ink);
+}
+
+.wn-compose {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.wn-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+}
+
+.wn-hint {
+  margin-right: auto;
+  font-size: 12px;
+  color: var(--ink-faint);
+}
+
+.wn-btn {
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 150ms ease, transform 120ms ease;
+}
+
+.wn-btn:active {
+  transform: scale(0.97);
+}
+
+.wn-btn-primary {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.wn-btn-primary:hover {
+  background: var(--accent-pressed);
+}
+
+.wn-btn-quiet {
+  background: var(--glass-recessed);
+}
+
+.wn-btn-quiet:hover {
+  background: var(--glass-pressed);
+}
+
+.wn-google {
+  width: 18px;
+  height: 18px;
+}
+
+/* Google's sign-in button keeps Google's look: plain white (or dark) with a hairline, never the accent. */
+.wn-btn-google {
+  background: #FFFFFF;
+  color: #1F1F1F;
+  border: 1px solid #DADCE0;
+  font-weight: 500;
+}
+
+.wn-btn-google:hover {
+  background: #F8F9FA;
+}
+
+@media (prefers-color-scheme: dark) {
+  .wn-btn-google {
+    background: #131314;
+    color: #E3E3E3;
+    border-color: #8E918F;
+  }
+
+  .wn-btn-google:hover {
+    background: #1F1F20;
+  }
+}
+
+/* ---------------------------------------------------------------- working and messages */
+
+.wn-working {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 2px 6px;
+  color: var(--ink-soft);
+}
+
+.wn-dots {
+  display: inline-flex;
+  gap: 5px;
+}
+
+.wn-dots i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent-ink);
+  animation: wn-breathe 1.1s ease-in-out infinite;
+}
+
+.wn-dots i:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.wn-dots i:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes wn-breathe {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+  40% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wn-dots i {
+    animation: none;
+    opacity: 0.7;
+  }
+}
+
+.wn-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+  padding: 6px 8px 4px;
+}
+
+.wn-message-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--glass-recessed);
+  color: var(--accent-ink);
+  margin-bottom: 4px;
+}
+
+.wn-message-icon .wn-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.wn-message-icon:has(.wn-logo) {
+  background: transparent;
+}
+
+.wn-message-title {
+  font-size: 15.5px;
+  font-weight: 650;
+}
+
+.wn-message-body {
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  max-width: 320px;
+}
+
+.wn-message + .wn-actions {
+  justify-content: center;
+  margin-top: 4px;
+}
+
+/* ---------------------------------------------------------------- listening (Flow) */
+
+.wn-listen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 4px 4px;
+  text-align: center;
+}
+
+.wn-wave {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 56px;
+  width: 100%;
+}
+
+.wn-wave i {
+  display: block;
+  width: 5px;
+  height: 100%;
+  border-radius: 3px;
+  background: var(--accent-ink);
+  transform: scaleY(0.12);
+  transition: transform 90ms linear;
+}
+
+.wn-wave i:nth-child(-n + 8) {
+  opacity: 0.55;
+}
+
+.wn-listen-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-soft);
+}
+
+.wn-rec-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--negative);
+  animation: wn-rec 1.4s ease-in-out infinite;
+}
+
+@keyframes wn-rec {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.wn-listen-hint {
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  max-width: 320px;
+}
+
+.wn-icon-btn-soft {
+  background: var(--glass-recessed);
+  color: var(--accent-ink);
+}
+
+.wn-icon-btn-soft:hover {
+  background: var(--glass-pressed);
+  color: var(--accent-ink);
+}
+
+.wn-actions .wn-btn-quiet .wn-icon,
+.wn-actions .wn-btn-primary .wn-icon {
+  width: 16px;
+  height: 16px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wn-wave i,
+  .wn-rec-dot {
+    transition: none;
+    animation: none;
+  }
+}
+
+/* ---------------------------------------------------------------- theme: follow the page the button sits on */
+
+.wn-root[data-theme="light"] {
+  --glass-thick: rgba(255, 255, 255, 0.92);
+  --glass-recessed: rgba(22, 22, 26, 0.08);
+  --glass-pressed: rgba(22, 22, 26, 0.16);
+  --edge-high: rgba(255, 255, 255, 0.95);
+  --edge-low: rgba(22, 22, 26, 0.08);
+  --shadow: rgba(0, 0, 0, 0.16);
+  --ink: #16161A;
+  --ink-soft: rgba(22, 22, 26, 0.70);
+  --ink-faint: rgba(22, 22, 26, 0.40);
+  --accent: #FFCC33;
+  --accent-pressed: #EFBB1E;
+  --on-accent: #1C1500;
+  --accent-ink: #8A5F00;
+  --negative: #DC2626;
+  --positive: #1E8E4E;
+}
+
+.wn-root[data-theme="dark"] {
+  --glass-thick: rgba(31, 31, 37, 0.92);
+  --glass-recessed: rgba(255, 255, 255, 0.07);
+  --glass-pressed: rgba(255, 255, 255, 0.22);
+  --edge-high: rgba(255, 255, 255, 0.20);
+  --edge-low: rgba(255, 255, 255, 0.08);
+  --shadow: rgba(0, 0, 0, 0.45);
+  --ink: #F4F4F6;
+  --ink-soft: rgba(244, 244, 246, 0.72);
+  --ink-faint: rgba(244, 244, 246, 0.42);
+  --accent: #FFD145;
+  --accent-pressed: #E9BC2E;
+  --on-accent: #1C1500;
+  --accent-ink: #FFD145;
+  --negative: #EF4444;
+  --positive: #4CD48A;
+}
+
+/* ---------------------------------------------------------------- the button: grip, menu, toast */
+
+.wn-launcher {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.wn-grip {
+  cursor: grab;
+  touch-action: none;
+  transition: transform 160ms ease;
+}
+
+.wn-grip:hover {
+  transform: scale(1.08);
+}
+
+.wn-launcher.is-dragging {
+  transition: none;
+  box-shadow: 0 18px 44px var(--shadow), 0 2px 6px var(--shadow), inset 0 1px 0 var(--edge-high);
+}
+
+.wn-launcher.is-dragging .wn-grip {
+  cursor: grabbing;
+}
+
+.wn-launcher.is-dragging .wn-chip {
+  pointer-events: none;
+}
+
+.wn-launcher.settle {
+  transition: left 280ms cubic-bezier(0.34, 1.45, 0.64, 1), top 280ms cubic-bezier(0.34, 1.45, 0.64, 1);
+}
+
+.wn-more {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  margin-left: 2px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink-faint);
+  opacity: 0;
+  cursor: pointer;
+  transition: width 180ms ease, opacity 180ms ease, margin 180ms ease, background-color 150ms ease;
+}
+
+.wn-launcher:hover .wn-more,
+.wn-launcher:focus-within .wn-more,
+.wn-launcher.menu-open .wn-more {
+  opacity: 1;
+}
+
+.wn-more:hover {
+  background: var(--glass-recessed);
+  color: var(--ink);
+}
+
+.wn-menu {
+  position: fixed;
+  min-width: 232px;
+  padding: 6px;
+  border-radius: 18px;
+  background: var(--glass-thick);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--edge-low);
+  box-shadow: 0 14px 40px var(--shadow), inset 0 1px 0 var(--edge-high);
+  animation: wn-in 260ms cubic-bezier(0.34, 1.45, 0.64, 1);
+}
+
+.wn-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: 36px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 550;
+  text-align: left;
+  cursor: pointer;
+}
+
+.wn-menu-item:hover {
+  background: var(--glass-recessed);
+}
+
+.wn-menu-note {
+  padding: 6px 12px 8px;
+  font-size: 11.5px;
+  line-height: 1.4;
+  color: var(--ink-faint);
+}
+
+.wn-toast {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: min(440px, calc(100vw - 24px));
+  padding: 8px 8px 8px 16px;
+  border-radius: var(--radius-pill);
+  background: var(--glass-thick);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--edge-low);
+  box-shadow: 0 14px 40px var(--shadow), inset 0 1px 0 var(--edge-high);
+  font-size: 13px;
+  font-weight: 550;
+  animation: wn-in 360ms cubic-bezier(0.34, 1.45, 0.64, 1);
+}
+
+.wn-toast .wn-toast-tick {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--positive);
+  color: #fff;
+}
+
+.wn-toast .wn-toast-tick .wn-icon {
+  width: 12px;
+  height: 12px;
+}
+
+.wn-toast .wn-btn {
+  height: 30px;
+  padding: 0 14px;
+  font-size: 13px;
+}
+
+/* A soft glow around the box the text just landed in. */
+.wn-flash {
+  position: fixed;
+  pointer-events: none;
+  border-radius: 16px;
+  box-shadow: 0 0 0 3px var(--accent), 0 0 32px 6px color-mix(in srgb, var(--accent) 55%, transparent);
+  animation: wn-flash 1100ms ease-out forwards;
+}
+
+@keyframes wn-flash {
+  0% { opacity: 0; transform: scale(1.01); }
+  18% { opacity: 1; }
+  100% { opacity: 0; transform: scale(1); }
+}
+
+/* ---------------------------------------------------------------- working: a shimmer where the text will appear */
+
+.wn-skeleton {
+  display: grid;
+  gap: 8px;
+  padding: 2px 0 6px;
+}
+
+.wn-skeleton i {
+  display: block;
+  height: 12px;
+  border-radius: 6px;
+  background: linear-gradient(100deg, var(--glass-recessed) 30%, var(--glass-pressed) 50%, var(--glass-recessed) 70%);
+  background-size: 220% 100%;
+  animation: wn-shimmer 1.4s ease-in-out infinite;
+}
+
+.wn-skeleton i:nth-child(1) { width: 96%; }
+.wn-skeleton i:nth-child(2) { width: 82%; animation-delay: 0.12s; }
+.wn-skeleton i:nth-child(3) { width: 58%; animation-delay: 0.24s; }
+
+@keyframes wn-shimmer {
+  from { background-position: 120% 0; }
+  to { background-position: -120% 0; }
+}
+
+/* ---------------------------------------------------------------- result: words arrive one by one; changes are marked */
+
+.wn-w {
+  opacity: 0;
+  animation: wn-word 260ms ease-out forwards;
+  animation-delay: calc(var(--i) * var(--step, 20ms));
+}
+
+@keyframes wn-word {
+  from { opacity: 0; transform: translateY(3px); }
+  to { opacity: 1; transform: none; }
+}
+
+.wn-chg {
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--accent) 38%, transparent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 38%, transparent);
+}
+
+.wn-draft.wn-nochg .wn-chg {
+  background: none;
+  box-shadow: none;
+}
+
+.wn-link {
+  margin-right: auto;
+  padding: 4px 2px;
+  border: 0;
+  background: none;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-faint);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.wn-link:hover {
+  color: var(--ink);
+}
+
+/* ---------------------------------------------------------------- listening: the card breathes with the voice */
+
+.wn-listen {
+  position: relative;
+  --lvl: 0;
+}
+
+.wn-listen::before {
+  content: "";
+  position: absolute;
+  inset: -4px -10px 30px;
+  border-radius: 28px;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 45%, transparent), transparent);
+  opacity: calc(0.15 + var(--lvl) * 0.75);
+  transform: scale(calc(0.92 + var(--lvl) * 0.12));
+  transition: opacity 90ms linear, transform 90ms linear;
+  pointer-events: none;
+}
+
+.wn-listen > * {
+  position: relative;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wn-w {
+    opacity: 1;
+    animation: none;
+  }
+
+  .wn-skeleton i,
+  .wn-flash,
+  .wn-toast,
+  .wn-menu {
+    animation: none;
+  }
+
+  .wn-listen::before {
+    transition: none;
+  }
+}
+
+/* ---------------------------------------------------------------- the button after a replace: "Done, Undo" */
+
+.wn-launcher .wn-done {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  padding: 0 2px 0 6px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.wn-launcher.show-done .wn-done {
+  display: flex;
+  animation: wn-in 320ms cubic-bezier(0.34, 1.45, 0.64, 1);
+}
+
+.wn-launcher.show-done .wn-chip,
+.wn-launcher.show-done .wn-more {
+  display: none;
+}
+
+.wn-launcher .wn-done .wn-toast-tick {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--positive);
+  color: #fff;
+}
+
+.wn-launcher .wn-done .wn-toast-tick .wn-icon {
+  width: 12px;
+  height: 12px;
+}
+
+.wn-launcher .wn-undo {
+  height: 28px;
+  padding: 0 14px;
+  font-size: 13px;
+}
+
+.wn-launcher .wn-undo[hidden] {
+  display: none;
+}
+
+.wn-launcher.show-done {
+  cursor: pointer;
+}
+
+.wn-scope {
+  font-size: 12px;
+  color: var(--ink-faint);
+}
+
+.wn-scope .wn-link {
+  margin: 0;
+  padding: 0 0 0 2px;
+  color: var(--accent-ink);
+}
+
+/* ---------------------------------------------------------------- reply line, report, compare, snippets, calm */
+
+.wn-replying {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 4px 4px 4px 12px;
+  border-radius: var(--radius-pill);
+  background: var(--glass-recessed);
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.wn-replying span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wn-replying .wn-icon-btn {
+  width: 24px;
+  height: 24px;
+}
+
+.wn-links {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-right: auto;
+}
+
+.wn-links .wn-link {
+  margin: 0;
+}
+
+.wn-report {
+  width: 28px;
+  height: 28px;
+  color: var(--ink-faint);
+}
+
+.wn-report .wn-icon {
+  width: 15px;
+  height: 15px;
+}
+
+.wn-draft.wn-peek {
+  outline: 1px dashed var(--ink-faint);
+  outline-offset: -1px;
+  color: var(--ink-soft);
+}
+
+.wn-menu-sep {
+  height: 1px;
+  margin: 6px 8px;
+  background: var(--edge-low);
+}
+
+.wn-menu-item span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* "Reduce motion" chosen in the popup: everything holds still. */
+.wn-calm *,
+.wn-calm *::before,
+.wn-calm *::after {
+  animation: none !important;
+  transition: none !important;
+}
+
+.wn-calm .wn-w {
+  opacity: 1 !important;
+}

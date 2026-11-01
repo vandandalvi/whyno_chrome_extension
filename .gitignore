@@ -1,0 +1,14 @@
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Build & packaging artifacts
+*.crx
+*.pem
+*.zip
+*.log
+
+# Local developer overrides
+.local
+*.swp
+*~

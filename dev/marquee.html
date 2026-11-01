@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Whyno Write marquee tile</title>
+  <!-- Development only: the 1400x560 marquee promo tile for the Chrome Web Store. -->
+  <style>
+    html, body { margin: 0; }
+    body {
+      width: 1400px; height: 560px; overflow: hidden; box-sizing: border-box; padding: 80px 96px;
+      font-family: -apple-system, "Segoe UI", Roboto, system-ui, sans-serif; color: #16161A;
+      background:
+        radial-gradient(520px 420px at 0% 0%, rgba(255, 210, 74, 0.55), transparent 70%),
+        radial-gradient(640px 520px at 100% 100%, rgba(205, 214, 232, 0.95), transparent 70%),
+        #EFEEEA;
+      display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 48px;
+    }
+    .brand { display: flex; align-items: center; gap: 16px; font-size: 30px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 36px; }
+    .brand img { width: 60px; height: 60px; border-radius: 16px; }
+    .brand span { font-weight: 450; color: rgba(22, 22, 26, 0.6); }
+    h1 { margin: 0; font-size: 62px; line-height: 1.04; letter-spacing: -0.035em; font-weight: 750; }
+    p { margin: 22px 0 0; font-size: 24px; line-height: 1.45; color: rgba(22, 22, 26, 0.66); max-width: 520px; }
+    .chips { display: flex; flex-direction: column; gap: 16px; align-items: flex-start; }
+    .chip { background: rgba(255, 255, 255, 0.9); border-radius: 999px; padding: 16px 28px; font-size: 26px; font-weight: 650; box-shadow: 0 8px 24px rgba(0,0,0,0.08); display: flex; align-items: center; gap: 14px; }
+    .chip small { font-size: 19px; font-weight: 450; color: rgba(22,22,26,0.6); }
+    .chip.on { background: #FFCC33; color: #1C1500; }
+  </style>
+</head>
+<body>
+  <section>
+    <div class="brand"><img src="/icons/icon128.png" alt="">whyno <span>Write</span></div>
+    <h1>Write better on<br>every website.</h1>
+    <p>Fix, Enhance and Flow, right where you type.</p>
+  </section>
+  <section class="chips">
+    <div class="chip on">Flow <small>speak it, get it written</small></div>
+    <div class="chip">Fix <small>clean up spelling and grammar</small></div>
+    <div class="chip">Enhance <small>sharper prompts for AI chats</small></div>
+  </section>
+</body>
+</html>

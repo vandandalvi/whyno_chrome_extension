@@ -1,0 +1,76 @@
+{
+  "manifest_version": 3,
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2Nd9tneZ4dZd8SCC0a7nYU+QoOy8zfuLqCNOlDWsWhv+K/inzRu0Yd1fgcQiAwYbwgYVHytrIqcfDpltFkqCT0Rov08vDx0evhRJJhxZKYFIfKPDZzoihOHsu+vQUNkZGMZOXura9cyal1+vOxxEQRkptodWqm826oRJDtLfKNQ5p62VzomQW+tytUx1smAiE6N6ItCDVI6VerN6HN/PWqOvO+ZX3bRfLes9qSCWBkvpuaomU4q0eP0wLLH2bWp/ZsDu2rtbwN70kntA7eZ/ms9BGFjNzGpy0zKyH2WBmK/LZcXnVtlF7dDHo8SP2RQCwLqNORbBZge0ALXxEPn5oQIDAQAB",
+  "name": "Whyno Write",
+  "version": "1.4.0",
+  "description": "Fix, Enhance and Flow on any website: fix writing, sharpen AI prompts, and turn spoken notes into polished messages.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "default_title": "Whyno Write"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "externally_connectable": {
+    "matches": [
+      "https://whyno.tech/*",
+      "https://www.whyno.tech/*",
+      "https://*.whyno.tech/*",
+      "http://localhost:3000/*"
+    ]
+  },
+  "commands": {
+    "whyno-write": {
+      "suggested_key": { "default": "Alt+Shift+F" },
+      "description": "Fix or Enhance the text in the box you are typing in"
+    },
+    "whyno-flow": {
+      "suggested_key": { "default": "Alt+Shift+V" },
+      "description": "Start Flow: speak and get a finished message"
+    }
+  },
+  "permissions": [
+    "storage",
+    "contextMenus",
+    "offscreen"
+  ],
+  "host_permissions": [
+    "https://api.whyno.tech/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": [
+        "config.js",
+        "sites.js",
+        "content/content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "styles/tokens.css",
+        "content/content.css",
+        "icons/icon48.png"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ]
+}

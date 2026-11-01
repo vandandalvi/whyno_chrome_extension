@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Allow the microphone · Whyno Write</title>
+  <link rel="stylesheet" href="../styles/tokens.css">
+  <link rel="stylesheet" href="mic.css">
+</head>
+<body>
+  <div class="bloom bloom-warm" aria-hidden="true"></div>
+  <div class="bloom bloom-cool" aria-hidden="true"></div>
+
+  <main class="card">
+    <img class="logo" src="../icons/icon128.png" alt="Whyno">
+
+    <section id="ask">
+      <div class="label">WHYNO WRITE</div>
+      <h1>Let Flow hear you.</h1>
+      <p>Flow turns what you say into a polished message. Your browser will ask once to allow the microphone for Whyno Write. Choose <strong>Allow</strong> (not "Allow this time") and it works on every site, with no more asking.</p>
+      <button class="btn-primary" id="allowBtn" type="button">Allow microphone</button>
+      <button class="btn-link" data-settings type="button">Or set it in the browser's settings</button>
+      <p class="fine">Whyno only listens while Flow shows it is listening. Your voice is sent to be turned into text and is not stored.</p>
+    </section>
+
+    <section id="done" hidden>
+      <div class="tick" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M5 12.5 L10 17.5 L19 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <h1>Microphone is on.</h1>
+      <p id="doneText">Taking you back to your tab…</p>
+    </section>
+
+    <section id="blocked" hidden>
+      <div class="label">MICROPHONE BLOCKED</div>
+      <h1>Chrome blocked the microphone.</h1>
+      <p>To turn it on, click the icon at the left of the address bar on this page, set <strong>Microphone</strong> to <strong>Allow</strong>, then press Try again.</p>
+      <button class="btn-primary" id="retryBtn" type="button">Try again</button>
+      <button class="btn-link" data-settings type="button">Open the microphone settings</button>
+    </section>
+
+    <section id="nomic" hidden>
+      <h1>No microphone found.</h1>
+      <p>Connect a microphone or headset, then press Try again.</p>
+      <button class="btn-primary" id="retryBtn2" type="button">Try again</button>
+    </section>
+  </main>
+
+  <script src="mic.js"></script>
+</body>
+</html>

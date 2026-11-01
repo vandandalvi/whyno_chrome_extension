@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<!--
+  Welcome tutorial. Opened by background.js when the extension is installed, and from the popup's
+  "How it works" link. Four short steps, each with a live animated demo. Always fits one screen.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to Whyno Write</title>
+  <link rel="stylesheet" href="../styles/tokens.css">
+  <link rel="stylesheet" href="../content/content.css">
+  <link rel="stylesheet" href="welcome.css">
+</head>
+<body>
+  <div class="bloom bloom-warm" aria-hidden="true"></div>
+  <div class="bloom bloom-cool" aria-hidden="true"></div>
+
+  <div class="app" role="dialog" aria-labelledby="stepTitle">
+    <header class="top">
+      <div class="brand">
+        <img src="../icons/icon128.png" width="36" height="36" alt="">
+        <span>whyno <em>Write</em></span>
+      </div>
+      <div class="progress" role="tablist" aria-label="Steps">
+        <button type="button" class="seg" role="tab" aria-label="Step 1: Fix"><i></i></button>
+        <button type="button" class="seg" role="tab" aria-label="Step 2: Enhance"><i></i></button>
+        <button type="button" class="seg" role="tab" aria-label="Step 3: Flow in AI apps"><i></i></button>
+        <button type="button" class="seg" role="tab" aria-label="Step 4: Flow in other apps"><i></i></button>
+      </div>
+      <button type="button" id="tourClose" class="skip">Skip</button>
+    </header>
+
+    <main class="main">
+      <section class="copy" aria-live="polite">
+        <div class="copy-inner" id="copy">
+          <span class="tag" id="stepTag"></span>
+          <h1 class="title" id="stepTitle"></h1>
+          <p class="desc" id="stepDesc"></p>
+          <div class="works">
+            <span class="works-label">Works on</span>
+            <div class="icons" id="stepIcons"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="stage" id="stage" aria-label="Live preview">
+        <div class="demo-wrap" id="demoWrap">
+          <div class="demo" id="demo" aria-hidden="true"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="bottom">
+      <p class="note">Whyno only reads your text when you tap a button, and never on password, email or card fields.</p>
+      <div class="actions">
+        <button type="button" id="tourBack" class="btn btn-quiet">Back</button>
+        <button type="button" id="tourNext" class="btn btn-primary">Next</button>
+        <button type="button" id="tourTry" class="btn btn-quiet" hidden>Try it first</button>
+        <button type="button" id="tourStart" class="btn btn-primary" hidden>Sign in and start</button>
+      </div>
+    </footer>
+  </div>
+
+  <script src="../config.js"></script>
+  <script src="demo.js"></script>
+  <script src="welcome.js"></script>
+</body>
+</html>
